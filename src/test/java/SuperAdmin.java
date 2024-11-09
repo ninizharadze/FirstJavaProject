@@ -1,5 +1,7 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,19 +9,19 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.By;
 
 
-public class login {
+public class SuperAdmin{
+    private WebDriver driver;
+
+
+    @Before
+    public void setUp(){
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        Login.LogIn(driver, "super+1@gmail.com", "Qwerty1$");
+    }
 
     @Test
-    public void LogInAndCreateSuperAdmin() throws InterruptedException {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://dev.admin.suada.com/login");
-
-        driver.findElement(By.xpath("//input[@type='text']")).sendKeys("super+1@gmail.com");
-        driver.findElement(By.xpath("//input[@type='password']")).sendKeys("Qwerty1$");
-        driver.findElement(By.xpath("//button[@type='submit']")).click();
-
-        Thread.sleep(2000);
+    public void CreateSuperAdmin() throws InterruptedException {
         driver.findElement(By.xpath("//*[text()='Users']")).click();
         Thread.sleep(2000);
 
@@ -35,15 +37,7 @@ public class login {
         Assert.assertTrue(assertionForCreate.getText().contains("new Super Admin has been added"));
     }
 @Test
-public void LogInAndDeleteSuperAdmin() throws InterruptedException {
-    WebDriverManager.chromedriver().setup();
-    WebDriver driver = new ChromeDriver();
-    driver.get("https://dev.admin.suada.com/login");
-
-    driver.findElement(By.xpath("//input[@type='text']")).sendKeys("super+1@gmail.com");
-    driver.findElement(By.xpath("//input[@type='password']")).sendKeys("Qwerty1$");
-    driver.findElement(By.xpath("//button[@type='submit']")).click();
-
+public void DeleteSuperAdmin() throws InterruptedException {
     Thread.sleep(2000);
     driver.findElement(By.xpath("//*[text()='Users']")).click();
     Thread.sleep(2000);
@@ -58,5 +52,10 @@ public void LogInAndDeleteSuperAdmin() throws InterruptedException {
 
 
 }
-
+    @After
+    public  void tearDown(){
+        if(driver != null){
+            driver.quit();
+        }
+    }
 }
